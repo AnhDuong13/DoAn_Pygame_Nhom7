@@ -32,8 +32,8 @@ blur_screen.fill((0, 0, 0))
 game_state = 1
 
 # enemy setting
-time_to_create = 1
-start_time = 0
+time_to_create = 1  # thoi gian tao alien
+start_time = 0 # bien dat gia tri thoi gian ban dau cho enemy
 time_to_fire = 5
 
 # Bullet
@@ -84,7 +84,7 @@ class Enemy:
         if self.state == 1:
             global game_state
             # fire pan
-            if get_time(self.timer) == time_to_fire:
+            if get_time(self.timer) >= time_to_fire:
                 pans.append(Pan(self.x + enemyWidth / 2, self.y + enemyWidth))
                 self.timer = get_now_time()
             # bounding
@@ -254,13 +254,16 @@ def loop_pan():
 
 
 # Show Score
+fps_timer = 0
 def show_ui():
-    global score_value, bullet_num
+    global score_value, bullet_num, fps_timer
     score = font.render("Scores: " + str(score_value), True, (255, 255, 255))
     bullet = font.render("Bullets: " + str(bullet_num), True, (255, 255, 255))
+    #time = get_time(fps_timer)
+    #fps = font.render("FPS: " + str(round(1/time)), True, (255, 255, 255))
     screen.blit(score, (50, 10))
     screen.blit(bullet, (50, 40))
-
+    #screen.blit(fps, (screen_width - 200, 10))
 
 # Game
 
@@ -301,7 +304,8 @@ def check_game_over():
 game_init()
 running = True
 while running:
-    screen.fill((153, 221, 255))
+    # fps_timer = get_now_time()
+    #screen.fill((153, 221, 255))
     screen.blit(background, (0, 0))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -315,6 +319,6 @@ while running:
     else:
         screen.blit(blur_screen, (0, 0))
         screen.blit(game_over_img, (screen_width / 2 - go_img_width / 2, screen_height / 2 - go_img_height / 2))
-    show_ui()
     check_game_over()
+    show_ui()
     pygame.display.update()
